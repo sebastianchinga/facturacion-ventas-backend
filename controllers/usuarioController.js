@@ -1,9 +1,34 @@
 import bcrypt from 'bcrypt';
 import Usuario from "../models/Usuario.js";
 import confirmarCuenta from '../helpers/confirmarCuenta.js';
+import generarJWT from '../helpers/generarJWT.js';
 
 export const login = async (req, res) => {
-    res.json({ msg: 'Hola' })
+    const { email, password } = req.body;
+    const usuario = await Usuario.findOne({ where: { email } });
+
+    if (!usuario) {
+        const error = new Error('Este usuario no existe');
+        return res.status(400).json({ msg: error.message })
+    }
+
+    if (!usuario.confirmado) {
+        const error = new Error('Confirma tu cuenta');
+        return res.status(400).json({ msg: error.message })
+    }
+
+    if (await usuario.comprobarPassword(password)) {
+        res.json({
+            id: usuario.id,
+            nombre: usuario.nombre,
+            email: usuario.email,
+            token: generarJWT(usuario.id)
+        })
+    } else {
+        const error = new Error('Password incorrecto');
+        return res.status(400).json({ msg: error.message })
+    }
+
 }
 
 export const registro = async (req, res) => {
@@ -42,8 +67,8 @@ export const confirmar = async (req, res) => {
 
     try {
         await usuario.save();
-        res.json({msg: 'Cuenta confirmada'})
+        res.json({ msg: 'Cuenta confirmada' })
     } catch (error) {
-        res.status(400).json({msg: error})
+        res.status(400).json({ msg: error })
     }
 }

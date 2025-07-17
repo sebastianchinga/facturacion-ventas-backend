@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import { DataTypes } from "sequelize";
 import db from "../config/db.js";
 import generarToken from "../helpers/generarToken.js";
@@ -24,5 +25,9 @@ const Usuario = db.define('usuarios', {
 }, {
     timestamps: false
 })
+
+Usuario.prototype.comprobarPassword = async function (passForm) {
+    return await bcrypt.compare(passForm, this.password);
+}
 
 export default Usuario;
