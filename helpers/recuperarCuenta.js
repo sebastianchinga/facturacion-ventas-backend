@@ -11,7 +11,11 @@ const recuperarCuenta = async (data) => {
             from: "Acme <onboarding@resend.dev>",
             to: email,
             subject: "Recupera tu Cuenta",
-            html: "<strong>it works!</strong>",
+            html: `
+                <p>Hola ${nombre}, te hemos enviado este e-mail para que recuperes tu cuenta</p>
+                <p>Sigue el siguiente enlace: <a href="${process.env.URL_FRONTEND}/olvide-password/${token}">Recuperar cuenta</a></p>
+                <p>Si no has solicitado recuperar tu cuenta, ignora este mensaje.</p>
+            `,
         })
         console.log(`Email enviado ${data.id}`);
     } catch (error) {

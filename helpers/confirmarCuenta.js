@@ -10,10 +10,14 @@ const confirmarCuenta = async (data) => {
 
     try {
         const { data } = await resend.emails.send({
-            from: "Acme <onboarding@resend.dev>",
+            from: "No Reply <onboarding@resend.dev>",
             to: email,
             subject: "Confirma tu Cuenta",
-            html: "<strong>it works!</strong>",
+            html: `
+                <p>Hola ${nombre}, te hemos enviado este e-mail para que confirmes tu cuenta</p>
+                <p>Sigue el siguiente enlace: <a href="${process.env.URL_FRONTEND}/confirmar-cuenta/${token}">Confirmar cuenta</a></p>
+                <p>Si no te has registrado en nuestra plataforma, ignora este mensaje</p>
+            `,
         })
         console.log(`Email enviado ${data.id}`);
     } catch (error) {
