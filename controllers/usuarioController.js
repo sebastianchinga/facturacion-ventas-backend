@@ -2,6 +2,8 @@ import bcrypt from 'bcrypt';
 import Usuario from "../models/Usuario.js";
 import confirmarCuenta from '../helpers/confirmarCuenta.js';
 import generarJWT from '../helpers/generarJWT.js';
+import generarToken from '../helpers/generarToken.js';
+import recuperarCuenta from '../helpers/recuperarCuenta.js';
 
 export const login = async (req, res) => {
     const { email, password } = req.body;
@@ -71,4 +73,59 @@ export const confirmar = async (req, res) => {
     } catch (error) {
         res.status(400).json({ msg: error })
     }
+}
+
+export const recuperar = async (req, res) => {
+    const { email } = req.body
+    const usuario = await Usuario.findOne({ where: { email } });
+
+    if (!usuario) {
+        const error = new Error('Esta cuenta no existe');
+        return res.status(400).json({ msg: error.message })
+    }
+
+    usuario.token = generarToken();
+    try {
+        await recuperarCuenta(usuario);
+        await usuario.save();
+        res.json({ msg: 'Te hemos enviado instrucciones a tu e-mail' })
+    } catch (error) {
+        res.status(400).json({ msg: error })
+    }
+}
+
+export const validar = async (req, res) => {
+    const { token } = req.params;
+    const usuario = await Usuario.findOne({ where: { token } });
+
+    if (!usuario) {
+        const error = new Error('Este token es inválido');
+        return res.status(400).json({ msg: error.message })
+    }
+
+    res.json(usuario);
+}
+
+export const cambiarPassword = async (req, res) => {
+    const { password } = req.body;
+    const { token } = req.params;
+    const usuario = await Usuario.findOne({ where: { token } });
+
+    if (!usuario) {
+        const error = new Error('Este token es inválido');
+        return res.status(400).json({ msg: error.message })
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    usuario.password = await bcrypt.hash(password, salt);
+    usuario.token = null;
+
+    try {
+        await usuario.save();
+        res.json({msg: 'Password modificado'});
+    } catch (error) {
+        res.status(400).json(error);
+    }
+
+
 }
