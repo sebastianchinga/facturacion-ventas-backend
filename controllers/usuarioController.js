@@ -129,3 +129,13 @@ export const cambiarPassword = async (req, res) => {
 
 
 }
+
+export const perfil = async (req, res) => {
+    const {usuario} = req;
+    res.json({
+        id: usuario.id,
+        nombre: usuario.nombre,
+        email: usuario.email,
+    })
+    
+}
