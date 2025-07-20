@@ -2,6 +2,11 @@ import DetalleVenta from "../models/DetalleVenta.js";
 import Producto from "../models/Producto.js";
 import Venta from "../models/Venta.js";
 
+export const listar = async (req, res) => {
+    const ventas = await Venta.findAll();
+    res.json(ventas);
+}
+
 export const crear = async (req, res) => {
 
     const { cliente, productos, total } = req.body;
