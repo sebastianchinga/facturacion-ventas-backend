@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import usuarioRoutes from './routes/usuarioRoutes.js';
 import db from './config/db.js';
 import productoRoutes from './routes/productoRoutes.js';
+import ventaRoutes from './routes/ventaRoutes.js';
 
 const app = express();
 dotenv.config();
@@ -29,6 +30,7 @@ app.use(cors(corsOptions));
 
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/productos', productoRoutes);
+app.use('/api/ventas', ventaRoutes);
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
