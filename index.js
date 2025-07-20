@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import usuarioRoutes from './routes/usuarioRoutes.js';
 import db from './config/db.js';
+import productoRoutes from './routes/productoRoutes.js';
 
 const app = express();
 dotenv.config();
@@ -26,7 +27,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 
-app.use('/api/usuarios', usuarioRoutes)
+app.use('/api/usuarios', usuarioRoutes);
+app.use('/api/productos', productoRoutes);
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
