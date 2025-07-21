@@ -18,14 +18,14 @@ app.use(express.json());
 const dominiosPermitidos = [process.env.URL_FRONTEND];
 const corsOptions = {
     origin: function (origin, callback) {
-        if (dominiosPermitidos.indexOf(origin) !== -1) {
+        if (!origin || dominiosPermitidos.includes(origin)) {
             callback(null, true);
         } else {
-            callback(new Error('No permitido por CORS'))
+            callback(new Error('No permitido por CORS'));
         }
-    }
-
-}
+    },
+    credentials: true,
+};
 
 app.use(cors(corsOptions));
 
