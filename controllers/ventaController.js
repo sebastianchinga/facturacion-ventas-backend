@@ -44,11 +44,11 @@ export const crear = async (req, res) => {
 
             // Finalmente actualizamos
             await Producto.update(datos, {
-                where: {id: producto.id}
+                where: { id: producto.id }
             })
 
             // Respondemos con un mensaje
-            res.json({msg: 'Venta creada'});
+            res.json({ msg: 'Venta creada' });
 
         }
 

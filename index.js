@@ -5,6 +5,8 @@ import usuarioRoutes from './routes/usuarioRoutes.js';
 import db from './config/db.js';
 import productoRoutes from './routes/productoRoutes.js';
 import ventaRoutes from './routes/ventaRoutes.js';
+import pdfRoutes from './routes/pdfRoutes.js';
+import './models/asociasiones.js';
 
 const app = express();
 dotenv.config();
@@ -27,10 +29,10 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/productos', productoRoutes);
 app.use('/api/ventas', ventaRoutes);
+app.use('/api/pdf', pdfRoutes);
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
