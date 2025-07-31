@@ -47,10 +47,9 @@ export const crear = async (req, res) => {
                 where: { id: producto.id }
             })
 
-            // Respondemos con un mensaje
-            res.json({ msg: 'Venta creada' });
-
         }
+        // Respondemos con un mensaje
+        res.json({ msg: 'Venta creada' });
 
     } catch (error) {
         res.json({ msg: 'Hubo un error al realizar la compra' })
